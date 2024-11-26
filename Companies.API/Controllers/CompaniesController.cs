@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Companies.API.Data;
 using Companies.API.Entities;
+using Companies.API.DTOs;
 
 namespace Companies.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Companies")]
     [ApiController]
     public class CompaniesController : ControllerBase
     {
@@ -25,7 +26,15 @@ namespace Companies.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompany()
         {
-            return await _context.Company./*Include(c => c.Employees)*/ToListAsync();
+            var companies = _context.Company.Select(c => new CompanyDto
+            {
+                Id = c.Id,
+                Address = c.Address,
+                Country = c.Country,
+                Name = c.Name
+            });
+
+            return Ok(await companies.ToListAsync());
         }
 
         // GET: api/Companies/5
