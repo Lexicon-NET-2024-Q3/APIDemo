@@ -14,7 +14,7 @@ public static class SeedData
             var db = serviceprovider.GetRequiredService<CompaniesContext>();
 
             await db.Database.MigrateAsync();
-            if (await db.Company.AnyAsync()) return;
+            if (await db.Companies.AnyAsync()) return;
 
             try
             {

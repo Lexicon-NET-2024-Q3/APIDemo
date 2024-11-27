@@ -33,7 +33,7 @@ namespace Companies.API.Controllers
             //var companies = await _context.Company.ToListAsync();
             //var dto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
 
-            var companies = await _context.Company.ProjectTo<CompanyDto>(_mapper.ConfigurationProvider).ToListAsync();
+            var companies = await _context.Companies.ProjectTo<CompanyDto>(_mapper.ConfigurationProvider).ToListAsync();
 
             return Ok(companies);
         }
@@ -42,7 +42,7 @@ namespace Companies.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CompanyDto>> GetCompany(int id)
         {
-            var company = await _context.Company.FindAsync(id);
+            var company = await _context.Companies.FindAsync(id);
 
             if (company == null)
             {
