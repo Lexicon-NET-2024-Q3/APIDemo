@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace Companies.Shared.DTOs;
 public record EmployeeDto
 {
-    public int Id { get; set; }
-    public string? Name { get; set; }
-    public int Age { get; set; }
-    public string? Position { get; set; }
+    public int Id { get; init; }
+    public string? Name { get; init; }
+    public int Age { get; init; }
+    public string? Position { get; init; }
 
   
 }

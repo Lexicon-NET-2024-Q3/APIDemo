@@ -10,6 +10,7 @@ using Companies.API.Entities;
 using Companies.API.DTOs;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Companies.Shared.DTOs;
 
 namespace Companies.API.Controllers
 {
@@ -85,16 +86,20 @@ namespace Companies.API.Controllers
         //    return NoContent();
         //}
 
-        //// POST: api/Companies
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Company>> PostCompany(Company company)
-        //{
-        //    _context.Company.Add(company);
-        //    await _context.SaveChangesAsync();
+        // POST: api/Companies
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<CompanyDto>> PostCompany(CompanyCreateDto dto)
+        {
+           
+            var company = _mapper.Map<Company>(dto);
+            _context.Companies.Add(company);
+            await _context.SaveChangesAsync();
 
-        //    return CreatedAtAction("GetCompany", new { id = company.Id }, company);
-        //}
+            var createdCompany = _mapper.Map<CompanyDto>(company);
+
+            return CreatedAtAction(nameof(GetCompany), new { id = createdCompany.Id }, createdCompany);
+        }
 
         //// DELETE: api/Companies/5
         //[HttpDelete("{id}")]

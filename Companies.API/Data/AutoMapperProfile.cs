@@ -11,5 +11,6 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Company, CompanyDto>();
         CreateMap<Employee, EmployeeDto>();
+        CreateMap<CompanyCreateDto, Company>();
     }
 }
