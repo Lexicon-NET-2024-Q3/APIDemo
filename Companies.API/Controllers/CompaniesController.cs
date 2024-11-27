@@ -38,8 +38,8 @@ namespace Companies.API.Controllers
         }
 
         // GET: api/Companies/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<CompanyDto>> GetCompany(int id)
         {
             var company = await _context.Company.FindAsync(id);
 
@@ -48,7 +48,15 @@ namespace Companies.API.Controllers
                 return NotFound();
             }
 
-            return company;
+            var dto = new CompanyDto
+            {
+                Id = company.Id,
+                Address = company.Address,
+                Country = company.Country,
+                Name = company.Name
+            };
+
+            return Ok(dto);
         }
 
         // PUT: api/Companies/5
