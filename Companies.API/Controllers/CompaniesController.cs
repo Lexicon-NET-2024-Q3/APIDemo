@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Companies.API.Data;
 using Companies.API.Entities;
 using Companies.API.DTOs;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Companies.API.Controllers
 {
@@ -16,25 +18,24 @@ namespace Companies.API.Controllers
     public class CompaniesController : ControllerBase
     {
         private readonly CompaniesContext _context;
+        private readonly IMapper _mapper;
 
-        public CompaniesController(CompaniesContext context)
+        public CompaniesController(CompaniesContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Companies
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompany()
         {
-            var companies = _context.Company.Select(c => new CompanyDto
-            {
-                Id = c.Id,
-                Address = c.Address,
-                Country = c.Country,
-                Name = c.Name
-            });
+            //var companies = await _context.Company.ToListAsync();
+            //var dto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
 
-            return Ok(await companies.ToListAsync());
+            var companies = await _context.Company.ProjectTo<CompanyDto>(_mapper.ConfigurationProvider).ToListAsync();
+
+            return Ok(companies);
         }
 
         // GET: api/Companies/5
@@ -48,13 +49,7 @@ namespace Companies.API.Controllers
                 return NotFound();
             }
 
-            var dto = new CompanyDto
-            {
-                Id = company.Id,
-                Address = company.Address,
-                Country = company.Country,
-                Name = company.Name
-            };
+            var dto = _mapper.Map<CompanyDto>(company);
 
             return Ok(dto);
         }
