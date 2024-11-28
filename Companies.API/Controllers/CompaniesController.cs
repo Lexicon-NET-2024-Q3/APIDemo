@@ -11,6 +11,7 @@ using Companies.API.DTOs;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Companies.Shared.DTOs;
+using Companies.API.Services;
 
 namespace Companies.API.Controllers
 {
@@ -18,13 +19,15 @@ namespace Companies.API.Controllers
     [ApiController]
     public class CompaniesController : ControllerBase
     {
-        private readonly CompaniesContext _context;
+        //private readonly CompaniesContext _context;
         private readonly IMapper _mapper;
+        private readonly ICompanyRepository companyRepo;
 
-        public CompaniesController(CompaniesContext context, IMapper mapper)
+        public CompaniesController(CompaniesContext context, IMapper mapper, ICompanyRepository companyRepo)
         {
-            _context = context;
+           // _context = context;
             _mapper = mapper;
+            this.companyRepo = companyRepo;
         }
 
         // GET: api/Companies
@@ -37,17 +40,22 @@ namespace Companies.API.Controllers
             //var companies = includeEmployees ? await _context.Companies.ProjectTo<CompanyDto>(_mapper.ConfigurationProvider).ToListAsync() :
             //                                   await _context.Companies.ProjectTo<CompanyDto>(_mapper.ConfigurationProvider).ToListAsync(); 
 
-            var companies = includeEmployees ? _mapper.Map<IEnumerable<CompanyDto>>(await _context.Companies.Include(c => c.Employees).ToListAsync()) :
-                                               _mapper.Map<IEnumerable<CompanyDto>>(await _context.Companies.ToListAsync());
-            
+            //var companies = includeEmployees ? await GetCompanies(true) :
+                                              // await GetCompanies();
+
+            var companies = includeEmployees ? _mapper.Map<IEnumerable<CompanyDto>>(await companyRepo.GetCompanies(true) ) :
+                                               _mapper.Map<IEnumerable<CompanyDto>>(await companyRepo.GetCompanies());
+
             return Ok(companies);
         }
+
+      
 
         // GET: api/Companies/5
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CompanyDto>> GetCompany(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
+            Company? company = await companyRepo.GetCompanyAsync(id);
 
             if (company == null)
             {
@@ -59,6 +67,8 @@ namespace Companies.API.Controllers
             return Ok(dto);
         }
 
+      
+
         // PUT: api/Companies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -66,7 +76,7 @@ namespace Companies.API.Controllers
         {
             if (id != dto.Id) return BadRequest();
 
-            var existingCompany = await _context.Companies.FindAsync(id);
+            var existingCompany = await companyRepo.GetCompanyAsync(id);
             if(existingCompany == null) return NotFound();
 
             _mapper.Map(dto, existingCompany);
@@ -83,7 +93,7 @@ namespace Companies.API.Controllers
         {
            
             var company = _mapper.Map<Company>(dto);
-            _context.Companies.Add(company);
+            companyRepo.Add(company);
             await _context.SaveChangesAsync();
 
             var createdCompany = _mapper.Map<CompanyDto>(company);
@@ -95,11 +105,10 @@ namespace Companies.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompany(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
+            var company = await companyRepo.GetCompanyAsync(id);
             if (company == null) return NotFound();
             
-
-            _context.Companies.Remove(company);
+            companyRepo.Delete(company);
             await _context.SaveChangesAsync();
 
             return NoContent();
