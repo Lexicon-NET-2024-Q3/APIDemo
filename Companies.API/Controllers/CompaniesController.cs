@@ -79,7 +79,7 @@ namespace Companies.API.Controllers
         // POST: api/Companies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CompanyDto>> PostCompany(CompanyCreateDto dto)
+        public async Task<IActionResult> PostCompany(CompanyCreateDto dto)
         {
            
             var company = _mapper.Map<Company>(dto);

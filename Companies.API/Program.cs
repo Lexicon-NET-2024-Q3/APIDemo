@@ -14,7 +14,11 @@ namespace Companies.API
             builder.Services.AddDbContext<CompaniesContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CompaniesContext") ?? throw new InvalidOperationException("Connection string 'CompaniesContext' not found.")));
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(configure => configure.ReturnHttpNotAcceptable = true)
+                           // .AddXmlDataContractSerializerFormatters()
+                            .AddNewtonsoftJson();
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
