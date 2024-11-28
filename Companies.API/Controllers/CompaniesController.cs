@@ -29,13 +29,17 @@ namespace Companies.API.Controllers
 
         // GET: api/Companies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompany()
+        public async Task<ActionResult<IEnumerable<Company>>> GetCompany(bool includeEmployees)
         {
             //var companies = await _context.Company.ToListAsync();
             //var dto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
 
-            var companies = await _context.Companies.ProjectTo<CompanyDto>(_mapper.ConfigurationProvider).ToListAsync();
+            //var companies = includeEmployees ? await _context.Companies.ProjectTo<CompanyDto>(_mapper.ConfigurationProvider).ToListAsync() :
+            //                                   await _context.Companies.ProjectTo<CompanyDto>(_mapper.ConfigurationProvider).ToListAsync(); 
 
+            var companies = includeEmployees ? _mapper.Map<IEnumerable<CompanyDto>>(await _context.Companies.Include(c => c.Employees).ToListAsync()) :
+                                               _mapper.Map<IEnumerable<CompanyDto>>(await _context.Companies.ToListAsync());
+            
             return Ok(companies);
         }
 
