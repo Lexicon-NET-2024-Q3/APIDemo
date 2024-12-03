@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Companies.API.Data;
 using AutoMapper;
 using Companies.Shared.DTOs;
 using Azure;
 using Microsoft.AspNetCore.JsonPatch;
+using Companies.Infrastructure.Data;
 
 namespace Companies.API.Controllers
 {

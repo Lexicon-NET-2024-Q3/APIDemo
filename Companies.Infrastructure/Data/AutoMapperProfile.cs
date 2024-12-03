@@ -3,7 +3,7 @@ using Companies.API.DTOs;
 using Companies.Shared.DTOs;
 using Domain.Models.Entities;
 
-namespace Companies.API.Data;
+namespace Companies.Infrastructure.Data;
 
 public class AutoMapperProfile : Profile
 {
@@ -16,7 +16,7 @@ public class AutoMapperProfile : Profile
         CreateMap<CompanyCreateDto, Company>();
         CreateMap<CompanyUpdateDto, Company>();
 
-        
+
         CreateMap<Employee, EmployeeDto>().ReverseMap();
         CreateMap<Employee, EmployeeUpdateDto>().ReverseMap();
     }
