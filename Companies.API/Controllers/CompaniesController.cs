@@ -45,8 +45,8 @@ namespace Companies.API.Controllers
             //var companies = includeEmployees ? await GetCompanies(true) :
                                               // await GetCompanies();
 
-            var companies = includeEmployees ? _mapper.Map<IEnumerable<CompanyDto>>(await uow.CompanyRepository.GetCompanies(true) ) :
-                                               _mapper.Map<IEnumerable<CompanyDto>>(await uow.CompanyRepository.GetCompanies());
+            var companies = includeEmployees ? _mapper.Map<IEnumerable<CompanyDto>>(await uow.CompanyRepository.GetCompaniesAsync(true) ) :
+                                               _mapper.Map<IEnumerable<CompanyDto>>(await uow.CompanyRepository.GetCompaniesAsync());
 
             return Ok(companies);
         }
@@ -95,7 +95,7 @@ namespace Companies.API.Controllers
         {
            
             var company = _mapper.Map<Company>(dto);
-            uow.CompanyRepository.Add(company);
+            uow.CompanyRepository.Create(company);
             await uow.CompleteASync();
 
             var createdCompany = _mapper.Map<CompanyDto>(company);
