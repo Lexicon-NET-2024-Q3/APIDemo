@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Companies.API.Data;
 using Companies.API.Services;
+using Companies.API.Extensions;
 
 namespace Companies.API
 {
@@ -26,15 +27,8 @@ namespace Companies.API
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
            // builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.ConfigureCors();
 
-            builder.Services.AddCors(builder =>
-            {
-                builder.AddPolicy("AllowAll", p =>
-                    p.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    );
-            });
 
             var app = builder.Build();
 
