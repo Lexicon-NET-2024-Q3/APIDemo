@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace Companies.Shared.DTOs;
 public record CompanyCreateDto : CompanyForManipulationDto
 {
-     
+    public IEnumerable<EmployeeDto>? Employees { get; set; }
 }

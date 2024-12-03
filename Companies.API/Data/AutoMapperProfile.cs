@@ -17,7 +17,7 @@ public class AutoMapperProfile : Profile
         CreateMap<CompanyUpdateDto, Company>();
 
         
-        CreateMap<Employee, EmployeeDto>();
+        CreateMap<Employee, EmployeeDto>().ReverseMap();
         CreateMap<Employee, EmployeeUpdateDto>().ReverseMap();
     }
 }
