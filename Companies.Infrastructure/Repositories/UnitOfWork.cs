@@ -1,8 +1,7 @@
-﻿
+﻿using Companies.Infrastructure.Data;
+using Domain.Contracts;
 
-using Companies.Infrastructure.Data;
-
-namespace Companies.API.Services;
+namespace Companies.Infrastructure.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

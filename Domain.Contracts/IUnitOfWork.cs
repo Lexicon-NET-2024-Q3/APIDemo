@@ -1,5 +1,4 @@
-﻿
-namespace Companies.API.Services;
+﻿namespace Domain.Contracts;
 
 public interface IUnitOfWork
 {

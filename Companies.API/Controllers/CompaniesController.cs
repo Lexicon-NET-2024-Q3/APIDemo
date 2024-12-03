@@ -9,8 +9,8 @@ using Companies.API.DTOs;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Companies.Shared.DTOs;
-using Companies.API.Services;
 using Domain.Models.Entities;
+using Domain.Contracts;
 
 namespace Companies.API.Controllers
 {

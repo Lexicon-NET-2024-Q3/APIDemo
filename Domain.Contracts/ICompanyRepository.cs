@@ -1,6 +1,8 @@
-﻿using Domain.Models.Entities;
+﻿
 
-namespace Companies.API.Services;
+using Domain.Models.Entities;
+
+namespace Domain.Contracts;
 public interface ICompanyRepository
 {
     void Add(Company company);
