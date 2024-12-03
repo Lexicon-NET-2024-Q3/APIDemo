@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Companies.API.Data;
-using Companies.API.Entities;
 using AutoMapper;
 using Companies.Shared.DTOs;
 using Azure;
