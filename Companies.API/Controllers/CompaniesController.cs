@@ -30,29 +30,13 @@ namespace Companies.API.Controllers
         public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees)
         {
             var companyDtos = await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees);
-
             return Ok(companyDtos);
         }
 
-      
-
-        // GET: api/Companies/5
-        //[HttpGet("{id:int}")]
-        //public async Task<ActionResult<CompanyDto>> GetCompany(int id)
-        //{
-        //    Company? company = await uow.CompanyRepository.GetCompanyAsync(id);
-
-        //    if (company == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var dto = _mapper.Map<CompanyDto>(company);
-
-        //    return Ok(dto);
-        //}
-
-      
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<CompanyDto>> GetCompany(int id) =>
+                Ok(await serviceManager.CompanyService.GetCompanyAsync(id));
+        
 
         //// PUT: api/Companies/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -76,7 +60,7 @@ namespace Companies.API.Controllers
         //[HttpPost]
         //public async Task<IActionResult> PostCompany(CompanyCreateDto dto)
         //{
-           
+
         //    var company = _mapper.Map<Company>(dto);
         //    uow.CompanyRepository.Create(company);
         //    await uow.CompleteASync();
@@ -98,6 +82,6 @@ namespace Companies.API.Controllers
 
         //    return NoContent();
         //}
-       
+
     }
 }
