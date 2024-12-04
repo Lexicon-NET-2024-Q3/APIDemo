@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Companies.Infrastructure\Companies.Infrastructure.csproj" />
+    <ProjectReference Include="..\Companies.Presemtation\Companies.Presemtation.csproj" />
     <ProjectReference Include="..\Companies.Services\Companies.Services.csproj" />
     <ProjectReference Include="..\Services.Contracts\Services.Contracts.csproj" />
   </ItemGroup>

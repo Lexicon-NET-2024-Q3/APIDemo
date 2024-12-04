@@ -1,30 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿//ToDo: Check references
 using AutoMapper;
 using Companies.Shared.DTOs;
-using Azure;
-using Microsoft.AspNetCore.JsonPatch;
-using Companies.Infrastructure.Data;
 using Domain.Contracts;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Companies.API.Controllers
+namespace Companies.Presemtation.Controllers
 {
     [Route("api/companies/{companyId}/employees")]
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-       // private readonly CompaniesContext _context;
+        // private readonly CompaniesContext _context;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork uow;
 
         public EmployeesController(IMapper mapper, IUnitOfWork uow)
         {
-          //  _context = context;
+            //  _context = context;
             _mapper = mapper;
             this.uow = uow;
         }
@@ -35,7 +28,7 @@ namespace Companies.API.Controllers
         {
             var companyExist = await uow.CompanyRepository.CompanyExistsAsync(companyId);
 
-            if(!companyExist) return NotFound();
+            if (!companyExist) return NotFound();
 
             var employees = await uow.EmployeeRepository.GetEmployeesAsync(companyId);
             var employeesDtos = _mapper.Map<IEnumerable<EmployeeDto>>(employees);

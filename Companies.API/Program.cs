@@ -6,6 +6,8 @@ using Companies.Infrastructure.Repositories;
 using Domain.Contracts;
 using Services.Contracts;
 using Companies.Services;
+using Companies.Presemtation;
+
 
 namespace Companies.API
 {
@@ -20,8 +22,10 @@ namespace Companies.API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CompaniesContext") ?? throw new InvalidOperationException("Connection string 'CompaniesContext' not found.")));
 
             builder.Services.AddControllers(configure => configure.ReturnHttpNotAcceptable = true)
-                           // .AddXmlDataContractSerializerFormatters()
-                            .AddNewtonsoftJson();
+                            // .AddXmlDataContractSerializerFormatters()
+                            .AddNewtonsoftJson()
+                            .AddApplicationPart(typeof(AssemblyReference).Assembly);
+                            
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
