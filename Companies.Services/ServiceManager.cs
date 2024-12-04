@@ -1,4 +1,5 @@
 ﻿using Domain.Contracts;
+using Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,19 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Companies.Services;
-public class ServiceManager
+public class ServiceManager : IServiceManager
 {
-    private readonly Lazy<CompanyService> companyService;
-    private readonly Lazy<EmployeeService> employeeService;
+    private readonly Lazy<ICompanyService> companyService;
+    private readonly Lazy<IEmployeeService> employeeService;
 
-    public CompanyService CompanyService => companyService.Value;
-    public EmployeeService EmployeeService => employeeService.Value;
+    public ICompanyService CompanyService => companyService.Value;
+    public IEmployeeService EmployeeService => employeeService.Value;
 
     public ServiceManager(IUnitOfWork uow)
     {
         ArgumentNullException.ThrowIfNull(nameof(uow));
 
-        companyService = new Lazy<CompanyService>(() => new CompanyService(uow));
-        employeeService = new Lazy<EmployeeService>(() => new EmployeeService(uow));
+        companyService = new Lazy<ICompanyService>(() => new CompanyService(uow));
+        employeeService = new Lazy<IEmployeeService>(() => new EmployeeService(uow));
     }
 }

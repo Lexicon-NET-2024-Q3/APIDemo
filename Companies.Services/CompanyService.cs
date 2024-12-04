@@ -1,8 +1,9 @@
 ﻿using Domain.Contracts;
+using Services.Contracts;
 
 namespace Companies.Services;
 
-public class CompanyService
+public class CompanyService : ICompanyService
 {
     private IUnitOfWork uow;
 

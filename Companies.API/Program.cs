@@ -4,6 +4,8 @@ using Companies.API.Extensions;
 using Companies.Infrastructure.Data;
 using Companies.Infrastructure.Repositories;
 using Domain.Contracts;
+using Services.Contracts;
+using Companies.Services;
 
 namespace Companies.API
 {
@@ -28,6 +30,7 @@ namespace Companies.API
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
            // builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
             builder.Services.ConfigureCors();
 
 
