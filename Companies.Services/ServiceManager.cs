@@ -1,4 +1,5 @@
-﻿using Domain.Contracts;
+﻿using AutoMapper;
+using Domain.Contracts;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,11 @@ public class ServiceManager : IServiceManager
     public ICompanyService CompanyService => companyService.Value;
     public IEmployeeService EmployeeService => employeeService.Value;
 
-    public ServiceManager(IUnitOfWork uow)
+    public ServiceManager(IUnitOfWork uow, IMapper mapper)
     {
         ArgumentNullException.ThrowIfNull(nameof(uow));
 
-        companyService = new Lazy<ICompanyService>(() => new CompanyService(uow));
-        employeeService = new Lazy<IEmployeeService>(() => new EmployeeService(uow));
+        companyService = new Lazy<ICompanyService>(() => new CompanyService(uow, mapper));
+        employeeService = new Lazy<IEmployeeService>(() => new EmployeeService(uow, mapper));
     }
 }
