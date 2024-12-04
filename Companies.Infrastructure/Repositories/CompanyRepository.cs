@@ -20,5 +20,9 @@ public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
         return includeEmployees ? await FindAll(trackChanges).Include(c => c.Employees).ToListAsync() :
                                   await FindAll(trackChanges).ToListAsync();
     }
-  
+
+    public async Task<bool> CompanyExistsAsync(int id)
+    {
+        return await Context.Companies.AnyAsync(c => c.Id == id);
+    }
 }

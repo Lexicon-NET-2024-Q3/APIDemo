@@ -10,4 +10,5 @@ public interface ICompanyRepository
     void Delete(Company company);
     Task<IEnumerable<Company>> GetCompaniesAsync(bool includeEmployees = false, bool trackChanges = false);
     Task<Company?> GetCompanyAsync(int id, bool trackChanges = false);
+    Task<bool> CompanyExistsAsync(int id);
 }
