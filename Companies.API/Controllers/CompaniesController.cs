@@ -34,7 +34,7 @@ namespace Companies.API.Controllers
 
         // GET: api/Companies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompany(bool includeEmployees)
+        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees)
         {
             //var companies = await _context.Company.ToListAsync();
             //var dto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
@@ -78,7 +78,7 @@ namespace Companies.API.Controllers
         {
             if (id != dto.Id) return BadRequest();
 
-            var existingCompany = await uow.CompanyRepository.GetCompanyAsync(id);
+            var existingCompany = await uow.CompanyRepository.GetCompanyAsync(id, trackChanges: true);
             if(existingCompany == null) return NotFound();
 
             _mapper.Map(dto, existingCompany);

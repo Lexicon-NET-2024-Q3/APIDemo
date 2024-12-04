@@ -21,12 +21,12 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     }
 
     public IQueryable<T> FindAll(bool trackChanges = false) =>
-        !trackChanges ? DbSet.AsNoTracking() :
-                        DbSet;
+                        trackChanges ? DbSet :
+                                       DbSet.AsNoTracking();
 
     public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false) =>
-                         !trackChanges ?    DbSet.Where(expression).AsNoTracking() :
-                                            DbSet.Where(expression);
+                         trackChanges ? DbSet.Where(expression) :
+                                        DbSet.Where(expression).AsNoTracking();
 
     public void Create(T entity) => DbSet.Add(entity);
     public void Delete(T entity) => DbSet.Remove(entity);
