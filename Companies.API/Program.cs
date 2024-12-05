@@ -32,9 +32,12 @@ namespace Companies.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-           // builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IServiceManager, ServiceManager>();
+           
+            builder.Services.ConfigureServiceLayerServices();
+            builder.Services.ConfigureRepositories();
+
+
+
             builder.Services.ConfigureCors();
 
 
