@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Companies.Infrastructure.Data
 {
-    public class CompaniesContext : DbContext
+    public class CompaniesContext : IdentityDbContext<Employee, IdentityRole, string>
     {
         public CompaniesContext(DbContextOptions<CompaniesContext> options)
             : base(options)

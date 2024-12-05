@@ -7,6 +7,8 @@ using Domain.Contracts;
 using Services.Contracts;
 using Companies.Services;
 using Companies.Presemtation;
+using Domain.Models.Entities;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace Companies.API
@@ -35,6 +37,20 @@ namespace Companies.API
            
             builder.Services.ConfigureServiceLayerServices();
             builder.Services.ConfigureRepositories();
+
+            builder.Services.AddAuthentication();
+            builder.Services.AddIdentityCore<Employee>(opt =>
+            {
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequiredLength = 3;
+            })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<CompaniesContext>()
+                .AddDefaultTokenProviders();
+
 
 
 
