@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Domain.Contracts;
+using Domain.Models.Contracts;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;

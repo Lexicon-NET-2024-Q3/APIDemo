@@ -3,10 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Companies.API.Extensions;
 using Companies.Infrastructure.Data;
 using Companies.Infrastructure.Repositories;
-using Domain.Contracts;
 using Services.Contracts;
 using Companies.Services;
 using Companies.Presemtation;
+using Domain.Models.Contracts;
 
 
 namespace Companies.API

@@ -1,6 +1,6 @@
 ﻿//ToDo: Check references
 using AutoMapper;
-using Domain.Contracts;
+using Domain.Models.Contracts;
 using Domain.Models.DTOs;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

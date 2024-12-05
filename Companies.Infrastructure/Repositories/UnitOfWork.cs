@@ -1,5 +1,5 @@
 ﻿using Companies.Infrastructure.Data;
-using Domain.Contracts;
+using Domain.Models.Contracts;
 
 namespace Companies.Infrastructure.Repositories;
 

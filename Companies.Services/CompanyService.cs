@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Domain.Contracts;
+using Domain.Models.Contracts;
 using Domain.Models.DTOs;
 using Domain.Models.Entities;
 using Services.Contracts;

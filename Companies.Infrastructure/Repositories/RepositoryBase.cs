@@ -1,5 +1,5 @@
 ﻿using Companies.Infrastructure.Data;
-using Domain.Contracts;
+using Domain.Models.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
