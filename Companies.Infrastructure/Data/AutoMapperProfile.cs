@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Companies.API.DTOs;
-using Companies.Shared.DTOs;
+using Domain.Models.DTOs;
 using Domain.Models.Entities;
 
 namespace Companies.Infrastructure.Data;
