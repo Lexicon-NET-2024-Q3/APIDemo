@@ -9,6 +9,7 @@ namespace Companies.Presemtation.Controllers;
 
 [Route("api/Companies")]
 [ApiController]
+[Authorize]
 public class CompaniesController : ControllerBase
 {
     private readonly IServiceManager serviceManager;
@@ -21,7 +22,7 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees)
     {
         var auth = User.Identity.IsAuthenticated;

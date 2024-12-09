@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Companies.API
@@ -26,7 +28,20 @@ namespace Companies.API
             builder.Services.AddDbContext<CompaniesContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CompaniesContext") ?? throw new InvalidOperationException("Connection string 'CompaniesContext' not found.")));
 
-            builder.Services.AddControllers(configure => configure.ReturnHttpNotAcceptable = true)
+            builder.Services.AddControllers(configure =>
+            {
+                     configure.ReturnHttpNotAcceptable = true;
+
+                //Global Filter
+                //var policy = new AuthorizationPolicyBuilder()
+                //                    .RequireAuthenticatedUser()
+                //                    .RequireRole("Employee")
+                //                    .Build();
+
+                //configure.Filters.Add(new AuthorizeFilter(policy));
+
+
+            })
                             // .AddXmlDataContractSerializerFormatters()
                             .AddNewtonsoftJson()
                             .AddApplicationPart(typeof(AssemblyReference).Assembly);
@@ -80,6 +95,19 @@ namespace Companies.API
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<CompaniesContext>()
                     .AddDefaultTokenProviders();
+
+
+            //builder.Services.AddAuthentication(options =>
+            //{
+            //    options.AddPolicy("AdminPolicy", policy =>
+            //       policy.RequireRole("Admin")
+            //             .RequireClaim(ClaimTypes.NameIdentifier)
+            //             .RequireClaim(ClaimTypes.Role));
+
+            //    options.AddPolicy("EmployeePolicy", policy =>
+            //        policy.RequireRole("Employee"));
+
+            //});
 
 
 
