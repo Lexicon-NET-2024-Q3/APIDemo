@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 
 namespace Companies.API
@@ -97,17 +98,17 @@ namespace Companies.API
                     .AddDefaultTokenProviders();
 
 
-            //builder.Services.AddAuthentication(options =>
-            //{
-            //    options.AddPolicy("AdminPolicy", policy =>
-            //       policy.RequireRole("Admin")
-            //             .RequireClaim(ClaimTypes.NameIdentifier)
-            //             .RequireClaim(ClaimTypes.Role));
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminPolicy", policy =>
+                   policy.RequireRole("Admin")
+                         .RequireClaim(ClaimTypes.NameIdentifier)
+                         .RequireClaim(ClaimTypes.Role));
 
-            //    options.AddPolicy("EmployeePolicy", policy =>
-            //        policy.RequireRole("Employee"));
+                options.AddPolicy("EmployeePolicy", policy =>
+                    policy.RequireRole("Employee"));
 
-            //});
+            });
 
 
 
