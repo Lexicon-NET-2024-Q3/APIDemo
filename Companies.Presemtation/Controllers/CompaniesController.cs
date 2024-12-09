@@ -1,5 +1,7 @@
 ﻿using Companies.API.DTOs;
+using Domain.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 
@@ -10,15 +12,25 @@ namespace Companies.Presemtation.Controllers;
 public class CompaniesController : ControllerBase
 {
     private readonly IServiceManager serviceManager;
+    private readonly UserManager<ApplicationUser> userManager;
 
-    public CompaniesController(IServiceManager serviceManager)
+    public CompaniesController(IServiceManager serviceManager, UserManager<ApplicationUser> userManager)
     {
         this.serviceManager = serviceManager;
+        this.userManager = userManager;
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees)
     {
+        var auth = User.Identity.IsAuthenticated;
+
+        var username= userManager.GetUserName(User);
+        var user = await userManager.GetUserAsync(User);
+
+
+
         var companyDtos = await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees);
         return Ok(companyDtos);
     }
