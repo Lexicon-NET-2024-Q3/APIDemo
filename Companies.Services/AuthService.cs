@@ -2,10 +2,14 @@
 using Companies.Shared.DTOs;
 using Domain.Models.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Services.Contracts;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,17 +19,72 @@ public class AuthService : IAuthService
     private readonly IMapper mapper;
     private readonly UserManager<ApplicationUser> userManager;
     private readonly RoleManager<IdentityRole> roleManager;
+    private readonly IConfiguration config;
+    private ApplicationUser? user;
 
-    public AuthService(IMapper mapper, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public AuthService(IMapper mapper, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config )
     {
         this.mapper = mapper;
         this.userManager = userManager;
         this.roleManager = roleManager;
+        this.config = config;
     }
 
-    public Task<string> CreateTokenAsync()
+    public async Task<string> CreateTokenAsync()
     {
-        throw new NotImplementedException();
+        SigningCredentials signing = GetSigningCredentials();
+        IEnumerable<Claim> claims = await GetClaimsAsync();
+        JwtSecurityToken tokenoptions = GenerateTokenOptions(signing, claims);
+
+        return new JwtSecurityTokenHandler().WriteToken(tokenoptions);
+
+    }
+
+    private JwtSecurityToken GenerateTokenOptions(SigningCredentials signing, IEnumerable<Claim> claims)
+    {
+        var jwtSettings = config.GetSection("JwtSettings");
+
+        var tokenOptions = new JwtSecurityToken(
+                                    issuer: jwtSettings["Issuer"],
+                                    audience: jwtSettings["Audience"],
+                                    claims: claims,
+                                    expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["Expires"])),  
+                                    signingCredentials: signing);
+
+        return tokenOptions;
+    }
+
+    private async Task<IEnumerable<Claim>> GetClaimsAsync()
+    {
+        ArgumentNullException.ThrowIfNull(nameof(user));
+
+        var claims = new List<Claim>()
+        {
+            new Claim(ClaimTypes.Name, user.UserName!),
+            new Claim("Age", user.Age.ToString())
+            //Add more if needed
+
+        };
+
+        var roles = await userManager.GetRolesAsync(user);
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        return claims;
+    }
+
+    private SigningCredentials GetSigningCredentials()
+    {
+        var secretKey = config["secretkey"];
+        ArgumentNullException.ThrowIfNull(secretKey, nameof(secretKey));
+
+        byte[] key = Encoding.UTF8.GetBytes(secretKey);
+        var secret = new SymmetricSecurityKey(key);
+
+        return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
     }
 
     public async Task<IdentityResult> RegisterUserAsync(UserForRegistrationDto registrationDto)
@@ -60,7 +119,7 @@ public class AuthService : IAuthService
             throw new ArgumentNullException(nameof(userForAuthDto));
         }
 
-        var user = await userManager.FindByNameAsync(userForAuthDto.UserName);
+        user = await userManager.FindByNameAsync(userForAuthDto.UserName);
         return user != null && await userManager.CheckPasswordAsync(user, userForAuthDto.PassWord);
 
     }
