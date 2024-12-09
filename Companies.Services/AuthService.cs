@@ -23,6 +23,11 @@ public class AuthService : IAuthService
         this.roleManager = roleManager;
     }
 
+    public Task<string> CreateTokenAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IdentityResult> RegisterUserAsync(UserForRegistrationDto registrationDto)
     {
         if (registrationDto is null)
@@ -46,5 +51,17 @@ public class AuthService : IAuthService
         }
 
         return result;
+    }
+
+    public async Task<bool> ValidateUserAsync(UserForAuthDto userForAuthDto)
+    {
+        if (userForAuthDto is null)
+        {
+            throw new ArgumentNullException(nameof(userForAuthDto));
+        }
+
+        var user = await userManager.FindByNameAsync(userForAuthDto.UserName);
+        return user != null && await userManager.CheckPasswordAsync(user, userForAuthDto.PassWord);
+
     }
 }
