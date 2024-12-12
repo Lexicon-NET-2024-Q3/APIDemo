@@ -1,9 +1,12 @@
 ﻿using Companies.API.DTOs;
+using Companies.Shared.Request;
 using Domain.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
+using System.Text.Json;
 
 namespace Companies.Presemtation.Controllers;
 
@@ -23,11 +26,14 @@ public class CompaniesController : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees)
+    public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany([FromQuery]CompanyRequestParams requestParams)
     {
         
-        var companyDtos = await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees);
-        return Ok(companyDtos);
+        var pagedReault = await serviceManager.CompanyService.GetCompaniesAsync(requestParams);
+
+        Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedReault.metaData));
+
+        return Ok(pagedReault.companyDtos);
     }
 
     [HttpGet("{id:int}")]

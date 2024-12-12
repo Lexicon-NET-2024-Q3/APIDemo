@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Companies.API.DTOs;
+using Companies.Shared.Request;
 using Domain.Contracts;
 using Domain.Models.Entities;
 using Domain.Models.Exceptions;
@@ -19,9 +20,12 @@ public class CompanyService : ICompanyService
         this.mapper = mapper;
     }
 
-    public async Task<IEnumerable<CompanyDto>> GetCompaniesAsync(bool includeEmployees, bool trackChanges = false)
+    public async Task<(IEnumerable<CompanyDto> companyDtos, MetaData metaData)> GetCompaniesAsync(CompanyRequestParams requestParams, bool trackChanges = false)
     {
-        return mapper.Map<IEnumerable<CompanyDto>>(await uow.CompanyRepository.GetCompaniesAsync(includeEmployees, trackChanges));
+        var pagedList = await uow.CompanyRepository.GetCompaniesAsync(requestParams, trackChanges);
+        var companysDto =  mapper.Map<IEnumerable<CompanyDto>>(pagedList.Items);
+        return (companysDto, pagedList.MetaData);
+
     }
 
     public async Task<CompanyDto> GetCompanyAsync(int id, bool trackChanges = false)
