@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace Companies.Presemtation.Controllers;
 public class ApiControllerBase : ControllerBase
 {
+    [NonAction]
     public ActionResult ProcessError(ApiBaseResponse baseResponse)
     {
 
