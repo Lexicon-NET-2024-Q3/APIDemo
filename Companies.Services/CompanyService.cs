@@ -2,7 +2,9 @@
 using Companies.API.DTOs;
 using Domain.Contracts;
 using Domain.Models.Entities;
+using Domain.Models.Exceptions;
 using Services.Contracts;
+using System.Net.Http.Headers;
 
 namespace Companies.Services;
 
@@ -27,9 +29,8 @@ public class CompanyService : ICompanyService
         Company? company = await uow.CompanyRepository.GetCompanyAsync(id);
 
         if (company == null)
-        {
-            //ToDo: Fix later
-        }
+            throw new CompanyNotFoundException(id);
+
 
         return mapper.Map<CompanyDto>(company);
     }

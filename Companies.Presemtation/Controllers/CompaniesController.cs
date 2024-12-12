@@ -25,19 +25,13 @@ public class CompaniesController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany(bool includeEmployees)
     {
-        var auth = User.Identity.IsAuthenticated;
-
-        var username= userManager.GetUserName(User);
-        var user = await userManager.GetUserAsync(User);
-
-
-
+        
         var companyDtos = await serviceManager.CompanyService.GetCompaniesAsync(includeEmployees);
         return Ok(companyDtos);
     }
 
     [HttpGet("{id:int}")]
-    [Authorize]
+    [AllowAnonymous]
     public async Task<ActionResult<CompanyDto>> GetCompany(int id) =>
             Ok(await serviceManager.CompanyService.GetCompanyAsync(id));
 
