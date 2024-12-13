@@ -30,14 +30,13 @@ public class RepoControollerTest
         mockRepo.Setup(x => x.GetEmployeesAsync(It.IsIn<int>(2,3), It.IsAny<bool>())).ReturnsAsync(users);
 
         var result = await sut.GetEmployees(2);
-        var resultType = result.Result as OkObjectResult;
+        //var resultType = result.Result as OkObjectResult;
 
         //Assert
-        Assert.IsType<OkObjectResult>(resultType);
-        Assert.Equal(StatusCodes.Status200OK, resultType.StatusCode);
-        var items = resultType.Value as List<ApplicationUser>;
-        Assert.IsType<List<ApplicationUser>>(items);
-        Assert.Equal(items.Count(), users.Count);
+        var okObjectResult =  Assert.IsType<OkObjectResult>(result.Result);
+        var items = Assert.IsType<List<ApplicationUser>>(okObjectResult.Value);
+      
+        Assert.Equal(items.Count, users.Count);
 
     }
 
