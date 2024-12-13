@@ -25,7 +25,14 @@ public class SimpleController : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany()
-    {
-        return Ok();
+    { 
+        if (User?.Identity?.IsAuthenticated ?? false)
+        {
+            return Ok("is auth");
+        }
+        else
+        {
+            return BadRequest("is not auth");
+        }
     }
 }
