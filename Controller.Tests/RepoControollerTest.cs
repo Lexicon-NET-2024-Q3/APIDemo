@@ -1,4 +1,7 @@
-﻿using Companies.Presemtation.ControllersForTestDemo;
+﻿using AutoMapper;
+using Companies.Infrastructure.Data;
+using Companies.Presemtation.ControllersForTestDemo;
+using Companies.Shared.DTOs;
 using Domain.Contracts;
 using Domain.Models.Entities;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +22,13 @@ public class RepoControollerTest
     public RepoControollerTest()
     {
          mockRepo = new Mock<IEmployeeRepository>();
-         sut = new RepositoryController(mockRepo.Object);
+
+            var mapper = new Mapper(new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfile>();
+            }));
+
+         sut = new RepositoryController(mockRepo.Object, mapper);
 
     }
 
@@ -34,7 +43,7 @@ public class RepoControollerTest
 
         //Assert
         var okObjectResult =  Assert.IsType<OkObjectResult>(result.Result);
-        var items = Assert.IsType<List<ApplicationUser>>(okObjectResult.Value);
+        var items = Assert.IsType<List<EmployeeDto>>(okObjectResult.Value);
       
         Assert.Equal(items.Count, users.Count);
 
