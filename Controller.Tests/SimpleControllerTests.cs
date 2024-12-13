@@ -23,12 +23,13 @@ public class SimpleControllerTests
     [Fact]
     public async Task GetCompany_IfNotAuth_ShouldReturd400BadRequest()
     {
-        var httpContextMock = new Mock<HttpContext>();
-        httpContextMock.SetupGet(x => x.User.Identity.IsAuthenticated).Returns(false);
+        //var httpContextMock = new Mock<HttpContext>();
+        //httpContextMock.SetupGet(x => x.User.Identity.IsAuthenticated).Returns(false);
+        var httpContext = Mock.Of<HttpContext>(x => x.User.Identity.IsAuthenticated == false);
 
         var controllerContext = new ControllerContext
         {
-            HttpContext = httpContextMock.Object,
+            HttpContext = httpContext,
         };
 
         var sut = new SimpleController();
