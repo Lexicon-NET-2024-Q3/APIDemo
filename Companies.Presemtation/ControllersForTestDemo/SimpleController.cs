@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace Companies.Presemtation.Controllers;
 
-[Route("api/Companies")]
+[Route("api/simple")]
 [ApiController]
 [Authorize]
 public class SimpleController : ControllerBase
