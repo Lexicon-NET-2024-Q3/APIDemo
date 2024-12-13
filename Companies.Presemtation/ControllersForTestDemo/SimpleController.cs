@@ -26,6 +26,7 @@ public class SimpleController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany()
     { 
+        
         if (User?.Identity?.IsAuthenticated ?? false)
         {
             return Ok("is auth");
