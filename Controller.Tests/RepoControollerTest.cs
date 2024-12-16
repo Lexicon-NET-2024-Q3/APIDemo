@@ -19,16 +19,17 @@ using System.Threading.Tasks;
 namespace Controller.Tests;
 public class RepoControollerTest
 {
-    private Mock<IEmployeeRepository> mockRepo;
+   // private Mock<IEmployeeRepository> mockRepo;
     private RepositoryController sut;
     private Mock<UserManager<ApplicationUser>> userManager;
+    private Mock<IUnitOfWork> mockUoW;
     private const string userName = "Kalle";
 
     public RepoControollerTest()
     {
-         mockRepo = new Mock<IEmployeeRepository>();
-         var mockUoW = new Mock<IUnitOfWork>();
-         mockUoW.Setup(x => x.EmployeeRepository).Returns(mockRepo.Object);
+        // mockRepo = new Mock<IEmployeeRepository>();
+         mockUoW = new Mock<IUnitOfWork>();
+         //mockUoW.Setup(x => x.EmployeeRepository).Returns(mockRepo.Object);
          
 
             var mapper = new Mapper(new MapperConfiguration(cfg =>
@@ -47,7 +48,7 @@ public class RepoControollerTest
     public async Task GetEmployees_ShouldReturnAllEmplyees()
     {
         var users = GetUsers();
-        mockRepo.Setup(x => x.GetEmployeesAsync(It.IsIn<int>(2,3), It.IsAny<bool>())).ReturnsAsync(users);
+        mockUoW.Setup(x => x.EmployeeRepository.GetEmployeesAsync(It.IsIn<int>(2,3), It.IsAny<bool>())).ReturnsAsync(users);
         userManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new ApplicationUser { UserName = userName });
 
        //U sut.SetUserIsAuth(true);
