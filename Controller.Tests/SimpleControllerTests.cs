@@ -1,5 +1,7 @@
+using Companies.API.DTOs;
 using Companies.Presemtation.Controllers;
 using Controller.Tests.Extensions;
+using Controller.Tests.TestFixtures;
 using Domain.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -9,12 +11,21 @@ using System.Security.Claims;
 
 namespace Controller.Tests;
 
-public class SimpleControllerTests
+public class SimpleControllerTests : IClassFixture<DatabaseFixture>
 {
+    private readonly DatabaseFixture fixture;
+
+    public SimpleControllerTests(DatabaseFixture fixture)
+    {
+        this.fixture = fixture;
+    }
+
+    //Todo: Fix!
+
     [Fact]
     public async void GetCompany_Should_Return400()
     {
-        var sut = new SimpleController();
+        var sut = fixture.Sut;
 
         var res = await sut.GetCompany();
         var resultType = res.Result as BadRequestObjectResult;
@@ -36,7 +47,7 @@ public class SimpleControllerTests
             HttpContext = httpContext,
         };
 
-        var sut = new SimpleController();
+        var sut = fixture.Sut;
         sut.ControllerContext = controllerContext;
 
         var res = await sut.GetCompany();
@@ -51,8 +62,7 @@ public class SimpleControllerTests
     {
         //var mockClaimsPrincipal = new Mock<ClaimsPrincipal>();
         //mockClaimsPrincipal.SetupGet(x => x.Identity.IsAuthenticated).Returns(false);
-
-        var sut = new SimpleController();
+        var sut = fixture.Sut;
         sut.SetUserIsAuth(false);
         //sut.ControllerContext = new ControllerContext
         //{
@@ -74,14 +84,28 @@ public class SimpleControllerTests
         [Fact]
     public async Task GetCompany_Auth_ShouldReturn200() 
     {
-        var sut = new SimpleController();
+        var sut = fixture.Sut;
         sut.SetUserIsAuth(true);
 
         var result = await sut.GetCompany();
         var resultType = result.Result as OkObjectResult;
 
         Assert.IsType<OkObjectResult>(resultType);
-    }
+    }      
+    
+    //[Fact]
+    //public async Task GetCompany_ShouldReturnExpectedCount() 
+    //{
+    //    var sut = fixture.Sut;
+    //    var expectedCount = fixture.Context.Companies.Count();
+
+    //    var result = await sut.GetCompany2();
+
+    //    var resultType = result.Result as OkObjectResult;
+
+    //    Assert.Equal(expectedCount, ))
+        
+    //}
 
 }
 
