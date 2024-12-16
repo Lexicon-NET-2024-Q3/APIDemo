@@ -12,7 +12,8 @@ using System.Security.Claims;
 
 namespace Controller.Tests;
 
-public class SimpleControllerTests : IClassFixture<DatabaseFixture>
+[Collection("DatabaseCollection")]
+public class SimpleControllerTests //: IClassFixture<DatabaseFixture>
 {
     private readonly DatabaseFixture fixture;
 
