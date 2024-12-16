@@ -1,5 +1,6 @@
 using Companies.API.DTOs;
 using Companies.Presemtation.Controllers;
+using Companies.Shared.DTOs;
 using Controller.Tests.Extensions;
 using Controller.Tests.TestFixtures;
 using Domain.Models.Entities;
@@ -25,7 +26,9 @@ public class SimpleControllerTests : IClassFixture<DatabaseFixture>
     [Fact]
     public async void GetCompany_Should_Return400()
     {
+        //Same problem here sideeffects from previous tests
         var sut = fixture.Sut;
+        sut.SetUserIsAuth(false);
 
         var res = await sut.GetCompany();
         var resultType = res.Result as BadRequestObjectResult;
@@ -38,8 +41,6 @@ public class SimpleControllerTests : IClassFixture<DatabaseFixture>
     [Fact]
     public async Task GetCompany_IfNotAuth_ShouldReturd400BadRequest()
     {
-        //var httpContextMock = new Mock<HttpContext>();
-        //httpContextMock.SetupGet(x => x.User.Identity.IsAuthenticated).Returns(false);
         var httpContext = Mock.Of<HttpContext>(x => x.User.Identity.IsAuthenticated == false);
 
         var controllerContext = new ControllerContext
@@ -58,19 +59,11 @@ public class SimpleControllerTests : IClassFixture<DatabaseFixture>
     }
 
     [Fact]
-    public async Task GetCompany_IfNotAuth_ShouldReturn400BadRequest2() 
+    public async Task GetCompany_IfNotAuth_ShouldReturn400BadRequest2()
     {
-        //var mockClaimsPrincipal = new Mock<ClaimsPrincipal>();
-        //mockClaimsPrincipal.SetupGet(x => x.Identity.IsAuthenticated).Returns(false);
         var sut = fixture.Sut;
         sut.SetUserIsAuth(false);
-        //sut.ControllerContext = new ControllerContext
-        //{
-        //    HttpContext = new DefaultHttpContext()
-        //    {
-        //        User = mockClaimsPrincipal.Object
-        //    }
-        //};
+
 
         var result = await sut.GetCompany();
         var resultType = result.Result as BadRequestObjectResult;
@@ -79,10 +72,10 @@ public class SimpleControllerTests : IClassFixture<DatabaseFixture>
         Assert.Equal(StatusCodes.Status400BadRequest, resultType.StatusCode);
 
 
-    }  
-        
-        [Fact]
-    public async Task GetCompany_Auth_ShouldReturn200() 
+    }
+
+    [Fact]
+    public async Task GetCompany_Auth_ShouldReturn200()
     {
         var sut = fixture.Sut;
         sut.SetUserIsAuth(true);
@@ -91,46 +84,47 @@ public class SimpleControllerTests : IClassFixture<DatabaseFixture>
         var resultType = result.Result as OkObjectResult;
 
         Assert.IsType<OkObjectResult>(resultType);
-    }      
-    
-    //[Fact]
-    //public async Task GetCompany_ShouldReturnExpectedCount() 
-    //{
-    //    var sut = fixture.Sut;
-    //    var expectedCount = fixture.Context.Companies.Count();
+    }
 
-    //    var result = await sut.GetCompany2();
+    [Fact]
+    public async Task GetCompany_ShouldReturnExpectedCount()
+    {
+        var sut = fixture.Sut;
+        var expectedCount = fixture.Context.Companies.Count();
 
-    //    var resultType = result.Result as OkObjectResult;
+        var result = await sut.GetCompany2();
 
-    //    Assert.Equal(expectedCount, ))
-        
-    //}
+        var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
+        var items = Assert.IsType<List<CompanyDto>>(okObjectResult.Value);
+
+        Assert.Equal(expectedCount, items.Count);
+
+    }
 
 }
 
-public interface IUserService
-{
-    Task<ApplicationUser?> GetUserAsync(ClaimsPrincipal principal);
-    Task<bool> IsInRoleAsync(ApplicationUser user, string role);
-}
+//public interface IUserService
+//{
+//    Task<ApplicationUser?> GetUserAsync(ClaimsPrincipal principal);
+//    Task<bool> IsInRoleAsync(ApplicationUser user, string role);
+//}
 
-public class UserService : IUserService
-{
-    private readonly UserManager<ApplicationUser> _userManager;
+//public class UserService : IUserService
+//{
+//    private readonly UserManager<ApplicationUser> _userManager;
 
-    public UserService(UserManager<ApplicationUser> userManager)
-    {
-        _userManager = userManager;
-    }
+//    public UserService(UserManager<ApplicationUser> userManager)
+//    {
+//        _userManager = userManager;
+//    }
 
-    public async Task<ApplicationUser?> GetUserAsync(ClaimsPrincipal principal)
-    {
-        return await _userManager.GetUserAsync(principal);
-    }
+//    public async Task<ApplicationUser?> GetUserAsync(ClaimsPrincipal principal)
+//    {
+//        return await _userManager.GetUserAsync(principal);
+//    }
 
-    public async Task<bool> IsInRoleAsync(ApplicationUser user, string role)
-    {
-        return await _userManager.IsInRoleAsync(user, role);
-    }
-}
+//    public async Task<bool> IsInRoleAsync(ApplicationUser user, string role)
+//    {
+//        return await _userManager.IsInRoleAsync(user, role);
+//    }
+//}
