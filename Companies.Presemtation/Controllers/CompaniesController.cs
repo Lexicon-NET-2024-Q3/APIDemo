@@ -25,7 +25,6 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet]
-    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<CompanyDto>>> GetCompany([FromQuery]CompanyRequestParams requestParams)
     {
         

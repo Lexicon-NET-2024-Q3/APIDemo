@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Companies.API\Companies.API.csproj" />
     <ProjectReference Include="..\Companies.Infrastructure\Companies.Infrastructure.csproj" />
     <ProjectReference Include="..\Companies.Presemtation\Companies.Presemtation.csproj" />
   </ItemGroup>
