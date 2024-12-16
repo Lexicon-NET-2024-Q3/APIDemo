@@ -21,11 +21,15 @@ public class RepoControollerTest
 {
     private Mock<IEmployeeRepository> mockRepo;
     private RepositoryController sut;
+    private Mock<UserManager<ApplicationUser>> userManager;
     private const string userName = "Kalle";
 
     public RepoControollerTest()
     {
          mockRepo = new Mock<IEmployeeRepository>();
+         var mockUoW = new Mock<IUnitOfWork>();
+         mockUoW.Setup(x => x.EmployeeRepository).Returns(mockRepo.Object);
+         
 
             var mapper = new Mapper(new MapperConfiguration(cfg =>
             {
@@ -33,10 +37,9 @@ public class RepoControollerTest
             }));
 
         var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
-        var userManager = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
-        userManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new ApplicationUser { UserName = userName });
+        userManager = new Mock<UserManager<ApplicationUser>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
 
-        sut = new RepositoryController(mockRepo.Object, mapper, userManager.Object);
+        sut = new RepositoryController(mockUoW.Object, mapper, userManager.Object);
 
     }
 
@@ -45,6 +48,7 @@ public class RepoControollerTest
     {
         var users = GetUsers();
         mockRepo.Setup(x => x.GetEmployeesAsync(It.IsIn<int>(2,3), It.IsAny<bool>())).ReturnsAsync(users);
+        userManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new ApplicationUser { UserName = userName });
 
        //U sut.SetUserIsAuth(true);
         var result = await sut.GetEmployees(2);
@@ -56,6 +60,12 @@ public class RepoControollerTest
       
         Assert.Equal(items.Count, users.Count);
 
+    }
+
+    [Fact]  
+    public async Task GetEmployees_ShouldThrowExceptionIfUserNotFound()
+    {
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.GetEmployees(1));
     }
 
     private List<ApplicationUser> GetUsers()

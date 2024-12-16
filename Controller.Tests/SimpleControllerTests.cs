@@ -1,6 +1,8 @@
 using Companies.Presemtation.Controllers;
 using Controller.Tests.Extensions;
+using Domain.Models.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Security.Claims;
@@ -81,4 +83,30 @@ public class SimpleControllerTests
         Assert.IsType<OkObjectResult>(resultType);
     }
 
+}
+
+public interface IUserService
+{
+    Task<ApplicationUser?> GetUserAsync(ClaimsPrincipal principal);
+    Task<bool> IsInRoleAsync(ApplicationUser user, string role);
+}
+
+public class UserService : IUserService
+{
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public UserService(UserManager<ApplicationUser> userManager)
+    {
+        _userManager = userManager;
+    }
+
+    public async Task<ApplicationUser?> GetUserAsync(ClaimsPrincipal principal)
+    {
+        return await _userManager.GetUserAsync(principal);
+    }
+
+    public async Task<bool> IsInRoleAsync(ApplicationUser user, string role)
+    {
+        return await _userManager.IsInRoleAsync(user, role);
+    }
 }
