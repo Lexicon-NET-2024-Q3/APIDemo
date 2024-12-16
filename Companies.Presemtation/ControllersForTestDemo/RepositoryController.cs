@@ -34,9 +34,6 @@ public class RepositoryController : ApiControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployees(int id)
     {
-        //var userId2 = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-        //if (string.IsNullOrEmpty(userId2)) throw new NullReferenceException(nameof(userId2));
         var user = await userManager.GetUserAsync(User);
         if(user is null) throw new ArgumentNullException(nameof(user));
 

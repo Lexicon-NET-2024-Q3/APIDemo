@@ -54,11 +54,12 @@ public class RepoControollerTest : IClassFixture<RepoControllerFixture>
     }
 
 
-    //ToDo fix!!!
+    
     [Fact]  
     public async Task GetEmployees_ShouldThrowExceptionIfUserNotFound()
     {
-        fixture.ServiceManagerMock.Verify(x => x.EmployeeService.GetEmployeesAsync(1), Times.Never());
-        await Assert.ThrowsAsync<ArgumentNullException>(async () => await fixture.Sut.GetEmployees(1));
+        //State from previous SetUp method. Methods dont run in parallel but order is not guaranted
+        fixture.UserManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync((ApplicationUser)null!);
+        await Assert.ThrowsAsync<ArgumentNullException>(() => fixture.Sut.GetEmployees(1));
     }
 }
